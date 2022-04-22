@@ -162,7 +162,7 @@ namespace VSSystem.IO.SourceCode
                         publishArgs.Add(sTargetRuntime);
                     }
 
-                    publishArgs.Add(string.Format("--nologo -v q -p:PublishSingleFile=true -p:SelfContained=true -p:PublishTrimmed=true"));
+                    publishArgs.Add(string.Format("--nologo -p:PublishSingleFile=true -p:SelfContained=true -p:PublishTrimmed=true"));
                     publishArgs.Add(string.Format("-o \"{0}\"", outputFolderPath));
 
                     ProcessStartInfo psi = new ProcessStartInfo("dotnet", string.Join(" ", publishArgs));
