@@ -10,6 +10,9 @@ namespace VSSystem.IO
         static readonly char[] _delimiters = new char[] { ' ', '=' };
         static string[] _ReadValuesPerLine(string line, char[] delimiters = default)
         {
+
+            //Console.WriteLine(line);
+
             if (delimiters == null || delimiters.Length == 0)
             {
                 delimiters = _delimiters;
@@ -40,7 +43,7 @@ namespace VSSystem.IO
                             lastIdx = idx;
                         }
                     }
-                    idx++;  
+                    idx++;
                 }
                 if (lastIdx > -1)
                 {
@@ -73,11 +76,27 @@ namespace VSSystem.IO
                 string[] cmdArgs = Environment.GetCommandLineArgs();
                 if (cmdArgs?.Length > 0)
                 {
-                    inputArgs.AddRange(cmdArgs);
+                    foreach (var arg in cmdArgs)
+                    {
+                        string tArgs = arg;
+                        if (arg.Contains(' '))
+                        {
+                            tArgs = _quot + arg + _quot;
+                        }
+                        inputArgs.Add(tArgs);
+                    }
                 }
                 if (additionalArgs?.Length > 0)
                 {
-                    inputArgs.AddRange(additionalArgs);
+                    foreach (var arg in additionalArgs)
+                    {
+                        string tArgs = arg;
+                        if (arg.Contains(' '))
+                        {
+                            tArgs = _quot + arg + _quot;
+                        }
+                        inputArgs.Add(tArgs);
+                    }
                 }
                 string mergeArgs = string.Join(" ", inputArgs);
 
