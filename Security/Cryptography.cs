@@ -15,7 +15,7 @@ namespace VSSystem.Security
             try
             {
                 result = new byte[hexString.Length / 2];
-                for(int i = 0; i < hexString.Length; i+=2)
+                for (int i = 0; i < hexString.Length; i += 2)
                 {
                     string hexChar = hexString[i] + "" + hexString[i + 1];
                     result[i / 2] = Convert.ToByte(hexChar, 16);
@@ -29,13 +29,16 @@ namespace VSSystem.Security
             string result = string.Empty;
             try
             {
-                if(!string.IsNullOrEmpty(strInput))
+                if (!string.IsNullOrEmpty(strInput))
                 {
                     byte[] binOutput = HashBinary(strInput, algName);
                     result = BitConverter.ToString(binOutput).Replace("-", "");
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return result;
         }
         public static string Hash(byte[] binInput, HashAlgName algName)
@@ -62,14 +65,41 @@ namespace VSSystem.Security
             byte[] result = new byte[0];
             try
             {
-                using (var hashAlg = HashAlgorithm.Create(algName.ToString()))
+
+                HashAlgorithm hashAlg = null;
+                if (algName == HashAlgName.SHA1)
                 {
-                    result = hashAlg.ComputeHash(binInput);
-                    hashAlg.Clear();
-                    hashAlg.Dispose();
+                    hashAlg = SHA1CryptoServiceProvider.Create();
                 }
+                else if (algName == HashAlgName.SHA256)
+                {
+                    hashAlg = SHA256CryptoServiceProvider.Create();
+                }
+                else if (algName == HashAlgName.SHA384)
+                {
+                    hashAlg = SHA384CryptoServiceProvider.Create();
+                }
+                else if (algName == HashAlgName.SHA512)
+                {
+                    hashAlg = SHA512CryptoServiceProvider.Create();
+                }
+                else if (algName == HashAlgName.MD5)
+                {
+                    hashAlg = MD5CryptoServiceProvider.Create();
+                }
+                if (hashAlg == null)
+                {
+                    throw new Exception("hashAlg cannot created. HashName: " + algName.ToString());
+                }
+
+                result = hashAlg.ComputeHash(binInput);
+                hashAlg.Clear();
+                hashAlg.Dispose();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return result;
         }
 
@@ -78,7 +108,7 @@ namespace VSSystem.Security
             string result = string.Empty;
             try
             {
-                if(string.IsNullOrEmpty(clearTextInput))
+                if (string.IsNullOrEmpty(clearTextInput))
                 {
                     return clearTextInput;
                 }
@@ -95,7 +125,7 @@ namespace VSSystem.Security
         {
             string result = string.Empty;
             try
-            {                
+            {
                 var binOutput = EncryptBinary(inputBytes, keyGuid);
                 result = Convert.ToBase64String(binOutput);
             }
@@ -126,7 +156,7 @@ namespace VSSystem.Security
         {
             string result = string.Empty;
             try
-            {                
+            {
                 var binOutput = EncryptBinary(inputBytes, keyGuid);
                 result = BitConverter.ToString(binOutput).Replace("-", "");
             }
@@ -181,14 +211,14 @@ namespace VSSystem.Security
                 }
                 byte[] binInput = HexToBytes(hexInput);
                 var binOutput = DecryptBinary(binInput, keyGuid);
-                if(rType == typeof(byte[]))
+                if (rType == typeof(byte[]))
                 {
                     result = (TResult)Convert.ChangeType(binOutput, rType);
                 }
                 else if (rType == typeof(string))
                 {
                     result = (TResult)Convert.ChangeType(Encoding.UTF8.GetString(binOutput), rType);
-                }                    
+                }
             }
             catch { }
             return result;
