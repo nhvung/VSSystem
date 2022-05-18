@@ -388,5 +388,45 @@ namespace VSSystem.ServiceProcess.Extensions
             catch { }
             return result;
         }
+        public static string ReadServiveName(this object sender, string defaultName)
+        {
+            string result = defaultName;
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("Enter service name [Enter without type for default name]: ");
+                ConsoleKeyInfo keyInfo;
+
+                do
+                {
+                    keyInfo = Console.ReadKey(true);
+                    if (keyInfo.Key != ConsoleKey.Backspace)
+                    {
+                        if (keyInfo.Key != ConsoleKey.Enter)
+                        {
+                            result += keyInfo.KeyChar;
+                            Console.Write(keyInfo.KeyChar);
+                        }
+                    }
+                    else
+                    {
+                        if (result.Length > 0)
+                        {
+                            result = result.Substring(0, result.Length - 1);
+                            Console.Write("\b \b");
+                        }
+
+                    }
+
+                } while (keyInfo.Key != ConsoleKey.Enter);
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    result = defaultName;
+                }
+            }
+            catch { }
+            Console.WriteLine();
+            return result;
+        }
     }
 }
