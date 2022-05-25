@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace VSSystem.ServiceProcess.Extensions
@@ -59,29 +60,15 @@ namespace VSSystem.ServiceProcess.Extensions
                     "echo \"$_CONTENT\" >> $SERVICE_FILE" + Environment.NewLine + Environment.NewLine +
 
                     "systemctl enable $SERVICE_NAME" + Environment.NewLine + Environment.NewLine
-
-                    //     "SH_FILE=start-service.sh" + Environment.NewLine +
-                    //     "echo \"sudo systemctl start $SERVICE_NAME\" >> $SH_FILE" + Environment.NewLine +
-                    //     "chmod +x $SH_FILE" + Environment.NewLine +
-                    //     "chmod 777 $SH_FILE" + Environment.NewLine + Environment.NewLine +
-
-                    //     "SH_FILE=status-service.sh" + Environment.NewLine +
-                    //    "echo \"sudo systemctl status $SERVICE_NAME\" >> $SH_FILE" + Environment.NewLine +
-                    //     "chmod +x $SH_FILE" + Environment.NewLine +
-                    //     "chmod 777 $SH_FILE" + Environment.NewLine + Environment.NewLine
-
-                    // "SH_FILE=stop-service.sh" + Environment.NewLine +
-                    // "echo \"sudo systemctl stop $SERVICE_NAME\" >> $SH_FILE" + Environment.NewLine +
-                    //  //$"echo \"sudo kill -9 `cat {name}.pid`\" >> $SH_FILE" + Environment.NewLine +
-                    //  "chmod +x $SH_FILE" + Environment.NewLine +
-                    // "chmod 777 $SH_FILE" + Environment.NewLine
                     ;
 
                     File.WriteAllText(file.FullName, cmd, Encoding.UTF8);
 
+
                 }
 
                 CreateUbuntuStartServiceFile(sender, workingFolder, name);
+                CreateUbuntuStatusServiceFile(sender, workingFolder, name);
 
             }
             catch { }
@@ -112,40 +99,12 @@ namespace VSSystem.ServiceProcess.Extensions
                     "systemctl daemon-reload" + Environment.NewLine +
                     "systemctl reset-failed" + Environment.NewLine + Environment.NewLine +
 
-                    // "SH_FILE=start-service.sh" + Environment.NewLine +
-                    // "if [ -f $SH_FILE ]; then rm $SH_FILE; fi" + Environment.NewLine + Environment.NewLine +
-
-                    // "SH_FILE=status-service.sh" + Environment.NewLine +
-                    // "if [ -f $SH_FILE ]; then rm $SH_FILE; fi" + Environment.NewLine + Environment.NewLine +
-
-                    // "SH_FILE=stop-service.sh" + Environment.NewLine +
-                    // "if [ -f $SH_FILE ]; then rm $SH_FILE; fi" + Environment.NewLine + Environment.NewLine +
-
-                    // "SH_FILE=run_service.sh" + Environment.NewLine +
-                    // "if [ -f $SH_FILE ]; then rm $SH_FILE; fi" + Environment.NewLine + Environment.NewLine +
-
                     "echo \"FINISH UNINSTALL\"" + Environment.NewLine
                     ;
 
                     File.WriteAllText(file.FullName, cmd);
                 }
 
-            }
-            catch { }
-        }
-
-        public static void CreateUbuntuFindPortCmdFile(this object sender, DirectoryInfo workingFolder, string name, params int[] ports)
-        {
-            try
-            {
-                if (ports?.Length > 0)
-                {
-                    FileInfo file = new FileInfo(workingFolder.FullName + "/findports-service.sh");
-                    File.WriteAllLines(file.FullName, new string[]{
-                   "#!/usr/bin/env bash",
-                    "sudo lsof -i :" + string.Join(",", ports)
-                }, Encoding.UTF8);
-                }
             }
             catch { }
         }
@@ -189,6 +148,19 @@ namespace VSSystem.ServiceProcess.Extensions
                 cmd += Environment.NewLine + Environment.NewLine + "sudo systemctl start " + name;
                 File.WriteAllText(startFile.FullName, cmd);
 
+
+
+            }
+            catch { }
+        }
+
+        public static void CreateUbuntuStatusServiceFile(this object sender, DirectoryInfo workingFolder, string name)
+        {
+            try
+            {
+                FileInfo startFile = new FileInfo(workingFolder.FullName + "/status-service.sh");
+                string cmd = "sudo systemctl status " + name;
+                File.WriteAllText(startFile.FullName, cmd);
             }
             catch { }
         }

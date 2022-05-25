@@ -87,7 +87,7 @@ namespace VSSystem.IO
                     zipStream.Dispose();
                 }
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
             }
             return fileEntries;
