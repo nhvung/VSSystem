@@ -24,6 +24,43 @@ namespace VSSystem.Security
             catch { }
             return result;
         }
+
+        static HashAlgorithm _CreateHashAlg(HashAlgName algName)
+        {
+            try
+            {
+                HashAlgorithm hashAlg = null;
+                if (algName == HashAlgName.SHA1)
+                {
+                    hashAlg = SHA1.Create();
+                }
+                else if (algName == HashAlgName.SHA256)
+                {
+                    hashAlg = SHA256.Create();
+                }
+                else if (algName == HashAlgName.SHA384)
+                {
+                    hashAlg = SHA384.Create();
+                }
+                else if (algName == HashAlgName.SHA512)
+                {
+                    hashAlg = SHA512.Create();
+                }
+                else if (algName == HashAlgName.MD5)
+                {
+                    hashAlg = MD5.Create();
+                }
+                if (hashAlg == null)
+                {
+                    throw new Exception("hashAlg cannot created. HashName: " + algName.ToString());
+                }
+                return hashAlg;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
         public static string Hash(string strInput, HashAlgName algName)
         {
             string result = string.Empty;
@@ -60,41 +97,18 @@ namespace VSSystem.Security
             byte[] binInput = Encoding.UTF8.GetBytes(strInput);
             return HashBinary(binInput, algName);
         }
+
         public static byte[] HashBinary(byte[] binInput, HashAlgName algName)
         {
             byte[] result = new byte[0];
             try
             {
-
-                HashAlgorithm hashAlg = null;
-                if (algName == HashAlgName.SHA1)
+                using (HashAlgorithm hashAlg = _CreateHashAlg(algName))
                 {
-                    hashAlg = SHA1CryptoServiceProvider.Create();
+                    result = hashAlg.ComputeHash(binInput);
+                    hashAlg.Clear();
+                    hashAlg.Dispose();
                 }
-                else if (algName == HashAlgName.SHA256)
-                {
-                    hashAlg = SHA256CryptoServiceProvider.Create();
-                }
-                else if (algName == HashAlgName.SHA384)
-                {
-                    hashAlg = SHA384CryptoServiceProvider.Create();
-                }
-                else if (algName == HashAlgName.SHA512)
-                {
-                    hashAlg = SHA512CryptoServiceProvider.Create();
-                }
-                else if (algName == HashAlgName.MD5)
-                {
-                    hashAlg = MD5CryptoServiceProvider.Create();
-                }
-                if (hashAlg == null)
-                {
-                    throw new Exception("hashAlg cannot created. HashName: " + algName.ToString());
-                }
-
-                result = hashAlg.ComputeHash(binInput);
-                hashAlg.Clear();
-                hashAlg.Dispose();
             }
             catch (Exception ex)
             {

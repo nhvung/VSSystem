@@ -133,12 +133,12 @@ namespace VSSystem.IO.SourceCode
             }
             catch { }
         }
-        public bool Publish(string outputFolderPath, ETargetRuntime targetRuntime = ETargetRuntime.Windows_x64, ExcludeCondition excludeCondition = default, CancellationToken cancellationToken = default)
+        public bool Publish(string outputFolderPath, ETargetRuntime targetRuntime = ETargetRuntime.Windows_x64, ETargetFramework targetFramework = ETargetFramework.DOTNET6, ExcludeCondition excludeCondition = default, CancellationToken cancellationToken = default)
         {
-            return Publish(outputFolderPath, targetRuntime.ToString(), excludeCondition, cancellationToken);
+            return Publish(outputFolderPath, targetRuntime.ToString(), targetFramework.ToString(), excludeCondition, cancellationToken);
         }
         Process _process;
-        public bool Publish(string outputFolderPath, string targetRuntime, ExcludeCondition excludeCondition = default, CancellationToken cancellationToken = default)
+        public bool Publish(string outputFolderPath, string targetRuntime, string targetFramework, ExcludeCondition excludeCondition = default, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -150,7 +150,11 @@ namespace VSSystem.IO.SourceCode
                     publishArgs.Add(string.Format("\"{0}\"", _ProjectFilePath));
                     publishArgs.Add(string.Format("-c Release"));
 
-                    string sTargetFramework = string.Format("-f {0}", _Framework);
+                    string sTargetFramework = string.Format("-f {0}", targetFramework);
+                    if (string.IsNullOrWhiteSpace(sTargetFramework))
+                    {
+                        sTargetFramework = _Framework;
+                    }
                     if (!string.IsNullOrWhiteSpace(sTargetFramework))
                     {
                         publishArgs.Add(sTargetFramework);

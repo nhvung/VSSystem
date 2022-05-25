@@ -214,7 +214,7 @@ namespace VSSystem.ServiceProcess.Extensions
                 }
 
                 FileInfo file = new FileInfo(workingFolder.FullName + "/install-service.bat");
-                string cmd = "sc create \"" + name + "\" binPath= \"\\\"" + workingFolder.FullName + "\\" + name + ".exe\\\" --tlog=\"1\" --binDir=\\\"" + workingFolder.FullName + "\\\" \"";
+                string cmd = "sc create \"" + name + "\" binPath= \"\\\"" + workingFolder.FullName + "\\" + name + ".exe\\\" --serviceName=\\\"" + name + "\\\" --tlog=\"1\" --binDir=\\\"" + workingFolder.FullName + "\\\" \"";
 
                 cmd += " start= auto type= own";
 
@@ -390,7 +390,7 @@ namespace VSSystem.ServiceProcess.Extensions
         }
         public static string ReadServiveName(this object sender, string defaultName)
         {
-            string result = defaultName;
+            string result = string.Empty;
             try
             {
                 Console.ForegroundColor = ConsoleColor.White;
