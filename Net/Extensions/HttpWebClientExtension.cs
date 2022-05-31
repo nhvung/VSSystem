@@ -214,6 +214,11 @@ namespace VSSystem.Net.Extensions
         {
             return _ProcessDataAsync(url, timeout, "GET", contentType, null, ignoreCertificate, additionalHeaders, cancellationToken);
         }
+        public static Task<HttpWebResult> GetDataAsync(this object sender, string url, int timeout, string contentType, byte[] data
+            , bool ignoreCertificate = false, IEnumerable<KeyValuePair<string, string>> additionalHeaders = null, CancellationToken cancellationToken = default)
+        {
+            return _ProcessDataAsync(url, timeout, "GET", contentType, data, ignoreCertificate, additionalHeaders, cancellationToken);
+        }
         public static Task<HttpWebResult> PostDataAsync(this object sender, string url, int timeout, string contentType, byte[] data
             , bool ignoreCertificate = false, IEnumerable<KeyValuePair<string, string>> additionalHeaders = null, CancellationToken cancellationToken = default)
         {
@@ -244,18 +249,6 @@ namespace VSSystem.Net.Extensions
         }
 
         #endregion
-
-        public static async Task<PingReply> PingAsync(this object sender, string hostNameOrAddress)
-        {
-            try
-            {
-                var ping = new Ping();
-                var pingReply = await ping.SendPingAsync(hostNameOrAddress);
-                return pingReply;
-            }
-            catch { }
-            return default;
-        }
 
         #endregion
 
