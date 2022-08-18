@@ -54,7 +54,7 @@ namespace VSSystem.IO
                 _fileNames = new List<string>() { },
                 _folderNames = new List<string>() { "@BK", "BK", "log", "logfile", "logfiles", "log_bk", "log_old", ".vs", "TempUnZipInfo", "packages", "Temp", "Download" },
                 _filePrefixNames = new List<string>() { },
-                 _folderPrefixNames = new List<string>() { "logfiles" }
+                _folderPrefixNames = new List<string>() { "logfiles" }
             };
             return result;
         }
@@ -64,7 +64,7 @@ namespace VSSystem.IO
             ExcludeCondition result = new ExcludeCondition()
             {
                 _fileExtensions = new List<string>() { ".vspscc", ".bak", ".sln", ".scc", ".pdb", ".bak", ".tmp" },
-                _fileNames = new List<string>() { "aspnetcorev2_inprocess.dll", "e_sqlite3.dll", "sni.dll" },
+                _fileNames = new List<string>() { "aspnetcorev2_inprocess.dll", "e_sqlite3.dll", "sni.dll", "web.config" },
                 _folderNames = new List<string>() { },
                 _filePrefixNames = new List<string>() { },
                 _folderPrefixNames = new List<string>() { }

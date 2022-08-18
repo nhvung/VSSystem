@@ -230,7 +230,7 @@ namespace VSSystem.Configuration
                                 {
                                     Array defaultValue = (Array)prop.GetValue(statisConfig);
                                     List<object> lValues = new List<object>();
-                                    for(int i = 0; i < defaultValue.Length; i++)
+                                    for (int i = 0; i < defaultValue.Length; i++)
                                     {
                                         lValues.Add(defaultValue.GetValue(i));
                                     }
@@ -280,13 +280,13 @@ namespace VSSystem.Configuration
                                     string sDefaultValues = string.Join(",", lValues);
                                     string sValue = ReadValue<string>(section, key, sDefaultValues);
                                     var tValues = sValue?.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                                    if(tValues?.Length > 0)
+                                    if (tValues?.Length > 0)
                                     {
                                         value = Activator.CreateInstance(prop.PropertyType, null);
                                         var addMethod = prop.PropertyType.GetMethod("Add");
 
                                         List<object> tValueObjs = new List<object>();
-                                        foreach(var tValue in tValues)
+                                        foreach (var tValue in tValues)
                                         {
                                             object tValueObj = null;
                                             try
@@ -301,9 +301,9 @@ namespace VSSystem.Configuration
                                                 }
                                             }
                                             catch { }
-                                            if(tValueObj != null)
+                                            if (tValueObj != null)
                                             {
-                                                if(addMethod != null)
+                                                if (addMethod != null)
                                                 {
                                                     addMethod.Invoke(value, new object[] { tValueObj });
                                                 }
@@ -395,6 +395,18 @@ namespace VSSystem.Configuration
             _defaultSections = defaultSections;
             _items = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
             _initializeValuesFromString(value);
+        }
+        public virtual void Save(string path = default)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    _path = path;
+                }
+                _ApplyChange();
+            }
+            catch { }
         }
     }
 }

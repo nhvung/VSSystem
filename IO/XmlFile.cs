@@ -13,6 +13,7 @@ namespace VSSystem.IO
         {
             try
             {
+
                 if (src == null)
                     return string.Empty;
                 if (encoding == null)

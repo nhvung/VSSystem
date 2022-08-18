@@ -61,7 +61,7 @@ namespace VSSystem.Extensions
 
         public static TimeZoneInfo FindTimeZoneInfo(TimeSpan ts)
         {
-            if(_MappingTimeZone == null)
+            if (_MappingTimeZone == null)
             {
                 _LoadTimeZone();
             }
@@ -131,9 +131,31 @@ namespace VSSystem.Extensions
                 DateTime result = dtOffset.AddMinutes(utcOffset.TotalMinutes).DateTime;
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                return DateTime.MinValue;
+            }
+        }
+
+        public static DateTime ToUtcTime(this DateTime dt, string sLocalTimeZone)
+        {
+
+            try
+            {
+                TimeSpan ts;
+                string sTime = dt.ToString("MM/dd/yyyy h:mm:ss tt");
+                string sNewTimeZone = sLocalTimeZone.ToUpper().Replace("UTC", "").Replace("GMT", "");
+                if (string.IsNullOrEmpty(sNewTimeZone)) sNewTimeZone = "+00:00";
+                string[] dtFormats = new string[] { "MM/dd/yyyy h:mm:ss tt zzz", "MM/dd/yyyy zzz", "M/d/yyyy h:mm:ss tt zzz", "M/d/yyyy zzz" };
+                var dtOffset = DateTimeOffset.ParseExact(sTime + " " + sNewTimeZone, dtFormats, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+                TimeZoneInfo tzInfo = FindTimeZoneInfo(sNewTimeZone, out ts);
+                var utcOffset = tzInfo.GetUtcOffset(dtOffset);
+                DateTime result = dtOffset.AddMinutes(-utcOffset.TotalMinutes).DateTime;
+                return result;
+            }
+            catch
+            {
+                return DateTime.MinValue;
             }
         }
 

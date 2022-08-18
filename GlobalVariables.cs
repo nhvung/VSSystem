@@ -15,23 +15,13 @@ namespace VSSystem
         static string _HostIPAddress;
         public static string HostIPAddress { get { return _HostIPAddress; } set { _HostIPAddress = value; } }
 
-        //static ALogger _Logger;
-        //public static ALogger Logger { get { return _Logger; } set { _Logger = value; } }
-
         static DirectoryInfo _WorkingFolder;
         public static DirectoryInfo WorkingFolder { get { return _WorkingFolder; } set { _WorkingFolder = value; } }
 
         static Models.OnlineConfigurationInfo _OnlineConfig;
         public static Models.OnlineConfigurationInfo OnlineConfig { get { return _OnlineConfig; } set { _OnlineConfig = value; } }
+        static Models.OSVersion _OSVersion;
+        public static Models.OSVersion OSVersion { get { return _OSVersion; } set { _OSVersion = value; } }
 
-        public static void InitializeValues()
-        {
-
-            try
-            {
-
-            }
-            catch { }
-        }
     }
 }

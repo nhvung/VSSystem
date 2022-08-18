@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using VSSystem.Net.Models;
 
 namespace VSSystem.Net.Extensions
@@ -43,11 +44,13 @@ namespace VSSystem.Net.Extensions
                 using (var client = _CreateHttpClient(url, timeout, ignoreCertificate))
                 {
                     HttpRequestMessage rMess = new HttpRequestMessage(method, url);
+                    //Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+                    rMess.Headers.Add("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36");
                     if (additionalHeaders?.Count() > 0)
                     {
                         foreach (var header in additionalHeaders)
                         {
-                            rMess.Headers.Add(header.Key, header.Value);
+                            rMess.Headers.Add(header.Key, HttpUtility.HtmlEncode(header.Value));
                         }
                     }
 
@@ -113,6 +116,16 @@ namespace VSSystem.Net.Extensions
            , bool ignoreCertificate = false, IEnumerable<KeyValuePair<string, string>> additionalHeaders = null, CancellationToken cancellationToken = default)
         {
             return _ProcessDataAsync(url, timeout, HttpMethod.Put, contentType, stream, ignoreCertificate, additionalHeaders, cancellationToken);
+        }
+        public static Task<HttpWebResult> TransferDataAsync(this object sender, string url, int timeout, string method, string contentType, byte[] data
+            , bool ignoreCertificate = false, IEnumerable<KeyValuePair<string, string>> additionalHeaders = null, CancellationToken cancellationToken = default)
+        {
+            return _ProcessDataAsync(url, timeout, new HttpMethod(method), contentType, new MemoryStream(data), ignoreCertificate, additionalHeaders, cancellationToken);
+        }
+        public static Task<HttpWebResult> TransferStreamAsync(this object sender, string url, int timeout, string method, string contentType, Stream stream
+            , bool ignoreCertificate = false, IEnumerable<KeyValuePair<string, string>> additionalHeaders = null, CancellationToken cancellationToken = default)
+        {
+            return _ProcessDataAsync(url, timeout, new HttpMethod(method), contentType, stream, ignoreCertificate, additionalHeaders, cancellationToken);
         }
         #endregion
     }

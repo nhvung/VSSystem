@@ -238,7 +238,7 @@ namespace VSSystem.ServiceProcess.Extensions
                 string cmd = "net stop " + name;
                 if (processID > 0)
                 {
-                    cmd += Environment.NewLine + Environment.NewLine + "taskkill /pid " + processID;
+                    cmd += Environment.NewLine + Environment.NewLine + "taskkill /f /pid " + processID;
                 }
                 File.WriteAllText(startFile.FullName, cmd);
 
@@ -254,7 +254,7 @@ namespace VSSystem.ServiceProcess.Extensions
                 string cmd = "net stop " + name;
                 if (processID > 0)
                 {
-                    cmd += Environment.NewLine + Environment.NewLine + "taskkill /pid " + processID;
+                    cmd += Environment.NewLine + Environment.NewLine + "taskkill /f /pid " + processID;
                 }
                 cmd += Environment.NewLine + Environment.NewLine + "net start " + name;
                 File.WriteAllText(startFile.FullName, cmd);
@@ -366,7 +366,7 @@ namespace VSSystem.ServiceProcess.Extensions
             try
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("Enter service name [Enter without type for default name]: ");
+                Console.Write("Enter service name [Enter without type for default name (" + defaultName + ")]: ");
                 ConsoleKeyInfo keyInfo;
 
                 do

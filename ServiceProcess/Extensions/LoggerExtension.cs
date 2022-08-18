@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using VSSystem.ServiceProcess.Hosting;
 using VSSystem.ServiceProcess.Workers;
 
 namespace VSSystem.ServiceProcess.Extensions
@@ -186,6 +187,94 @@ namespace VSSystem.ServiceProcess.Extensions
 
         #endregion
 
+        #region Service Host
+        #region Log Common
+        public static Task LogInfoAsync(this IHost sender, string contents)
+        {
+            return sender?.Logger?.LogInfoAsync(sender.Name, contents, sender.Name);
+        }
+        public static Task LogDebugAsync(this IHost sender, string contents)
+        {
+            return sender?.Logger?.LogDebugAsync(sender.Name, contents, sender.Name);
+        }
+        public static Task LogWarningAsync(this IHost sender, string contents)
+        {
+            return sender?.Logger?.LogWarningAsync(sender.Name, contents, sender.Name);
+        }
+        public static Task LogErrorAsync(this IHost sender, string contents)
+        {
+            return sender?.Logger?.LogErrorAsync(sender.Name, contents, sender.Name);
+        }
+        public static Task LogErrorAsync(this IHost sender, Exception ex)
+        {
+            return sender?.Logger?.LogErrorAsync(sender.Name, ex, sender.Name);
+        }
+        public static void LogInfo(this IHost sender, string contents)
+        {
+            sender?.Logger?.LogInfo(sender.Name, contents, sender.Name);
+        }
+        public static void LogDebug(this IHost sender, string contents)
+        {
+            sender?.Logger?.LogDebug(sender.Name, contents, sender.Name);
+        }
+        public static void LogWarning(this IHost sender, string contents)
+        {
+            sender?.Logger?.LogWarning(sender.Name, contents, sender.Name);
+        }
+        public static void LogError(this IHost sender, string contents)
+        {
+            sender?.Logger?.LogError(sender.Name, contents, sender.Name);
+        }
+        public static void LogError(this IHost sender, Exception ex)
+        {
+            sender?.Logger?.LogError(sender.Name, ex, sender.Name);
+        }
+        #endregion
 
+        #region Log with Tag
+        public static Task LogInfoWithTagAsync(this IHost sender, string tagName, string contents)
+        {
+            return sender?.Logger?.LogInfoWithTagAsync(sender.Name, tagName, contents, sender.Name);
+        }
+        public static Task LogDebugWithTagAsync(this IHost sender, string tagName, string contents)
+        {
+            return sender?.Logger?.LogDebugWithTagAsync(sender.Name, tagName, contents, sender.Name);
+        }
+        public static Task LogWarningWithTagAsync(this IHost sender, string tagName, string contents)
+        {
+            return sender?.Logger?.LogWarningWithTagAsync(sender.Name, tagName, contents, sender.Name);
+        }
+        public static Task LogErrorWithTagAsync(this IHost sender, string tagName, string contents)
+        {
+            return sender?.Logger?.LogErrorWithTagAsync(sender.Name, tagName, contents, sender.Name);
+        }
+        public static Task LogErrorWithTagAsync(this IHost sender, string tagName, Exception ex)
+        {
+            return sender?.Logger?.LogErrorWithTagAsync(sender.Name, tagName, ex, sender.Name);
+        }
+        public static void LogInfoWithTag(this IHost sender, string tagName, string contents)
+        {
+            sender?.Logger?.LogInfoWithTag(sender.Name, tagName, contents, sender.Name);
+        }
+        public static void LogDebugWithTag(this IHost sender, string tagName, string contents)
+        {
+            sender?.Logger?.LogDebugWithTag(sender.Name, tagName, contents, sender.Name);
+        }
+        public static void LogWarningWithTag(this IHost sender, string tagName, string contents)
+        {
+            sender?.Logger?.LogWarningWithTag(sender.Name, tagName, contents, sender.Name);
+        }
+        public static void LogErrorWithTag(this IHost sender, string tagName, string contents)
+        {
+            sender?.Logger?.LogErrorWithTag(sender.Name, tagName, contents, sender.Name);
+        }
+        public static void LogErrorWithTag(this IHost sender, string tagName, Exception ex)
+        {
+            sender?.Logger?.LogErrorWithTag(sender.Name, tagName, ex, sender.Name);
+        }
+        #endregion
+
+
+        #endregion
     }
 }

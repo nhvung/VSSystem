@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System;
-using System.IO;
 
 namespace VSSystem.Extensions
 {
@@ -50,6 +49,7 @@ namespace VSSystem.Extensions
                     psi.UseShellExecute = false;
                     psi.RedirectStandardOutput = true;
                     psi.WindowStyle = ProcessWindowStyle.Hidden;
+                    //psi.Verb = "runas";
                     using (var p = new System.Diagnostics.Process())
                     {
                         p.StartInfo = psi;
@@ -60,9 +60,9 @@ namespace VSSystem.Extensions
                     }
                 }
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-
+                throw ex;
             }
             return result;
         }

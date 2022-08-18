@@ -409,23 +409,20 @@ namespace VSSystem.IO.Extensions
             try
             {
                 bool includeCurrent = currentFolderLevel > keepingFolderLevel;
-                if (includeCurrent)
+                var files = folder.GetFiles();
+                if (files?.Length > 0)
                 {
-                    var files = folder.GetFiles();
-                    if (files?.Length > 0)
+                    int deletedFileCount = 0;
+                    foreach (var file in files)
                     {
-                        int deletedFileCount = 0;
-                        foreach (var file in files)
-                        {
 
-                            try
-                            {
-                                file.Attributes = FileAttributes.Archive;
-                                file.Delete();
-                                deletedFileCount++;
-                            }
-                            catch { }
+                        try
+                        {
+                            file.Attributes = FileAttributes.Archive;
+                            file.Delete();
+                            deletedFileCount++;
                         }
+                        catch { }
                     }
                 }
 

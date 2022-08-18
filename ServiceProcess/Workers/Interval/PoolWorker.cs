@@ -22,8 +22,8 @@ namespace VSSystem.ServiceProcess.Workers
         protected bool _deleteSignFileWhenFinish;
         protected bool _deleteFolderSignFileWhenFinish;
         protected SearchOption _searchOption;
-        
-        public PoolWorker(IntervalWorkerStartInfo startInfo, ALogger logger = null) 
+
+        public PoolWorker(IntervalWorkerStartInfo startInfo, ALogger logger = null)
             : base(startInfo, logger)
         {
             _networkSharedPoolPath = "";
@@ -77,7 +77,7 @@ namespace VSSystem.ServiceProcess.Workers
                 if (level == _signFileLevel)
                 {
                     FileInfo[] signFiles = folder.GetFiles("*" + _signFileExtension, _searchOption);
-                    if(signFiles?.Length > 0)
+                    if (signFiles?.Length > 0)
                     {
                         if (_NumberOfThreads > 1)
                         {
@@ -93,7 +93,7 @@ namespace VSSystem.ServiceProcess.Workers
                                 }
                                 catch { }
                             }, _NumberOfThreads);
-                            if(_deleteFolderSignFileWhenFinish)
+                            if (_deleteFolderSignFileWhenFinish)
                             {
                                 try
                                 {
@@ -115,7 +115,7 @@ namespace VSSystem.ServiceProcess.Workers
                                     }
                                 }
                                 catch { }
-                                
+
                             }
                             if (_deleteFolderSignFileWhenFinish)
                             {
@@ -126,7 +126,7 @@ namespace VSSystem.ServiceProcess.Workers
                                 catch { }
                             }
                         }
-                    }                    
+                    }
                 }
                 else
                 {
@@ -145,15 +145,15 @@ namespace VSSystem.ServiceProcess.Workers
         }
 
 
-        protected virtual void ProcessSignFile(FileInfo signFile, CancellationToken cancellationToken) 
+        protected virtual void ProcessSignFile(FileInfo signFile, CancellationToken cancellationToken)
         {
-            if(!string.IsNullOrWhiteSpace(_processFileExtension))
+            if (!string.IsNullOrWhiteSpace(_processFileExtension))
             {
                 FileInfo processFile = GetProcessFile(signFile, _processFileExtension);
-                if(processFile.Exists)
+                if (processFile.Exists)
                 {
                     ProcessFile(processFile, cancellationToken);
-                    if(_deleteSignFileWhenFinish)
+                    if (_deleteSignFileWhenFinish)
                     {
 
                         try
@@ -203,6 +203,10 @@ namespace VSSystem.ServiceProcess.Workers
         protected FileInfo GetProcessFile(FileInfo signFile, string fileExtension)
         {
             return new FileInfo(signFile.DirectoryName + "/" + Path.GetFileNameWithoutExtension(signFile.Name) + fileExtension);
+        }
+        protected FileInfo GetSignFile(FileInfo processFile, string fileExtension = ".sign")
+        {
+            return new FileInfo(processFile.DirectoryName + "/" + Path.GetFileNameWithoutExtension(processFile.Name) + fileExtension);
         }
     }
 }

@@ -22,13 +22,13 @@ namespace VSSystem.Net.Models
 
         HttpStatusCode _StatusCode;
         public HttpStatusCode StatusCode { get { return _StatusCode; } set { _StatusCode = value; } }
+        const int DEFAULT_BUFFER_SIZE = 10 * 1024 * 1024;
 
-       
         public HttpWebResult(Stream stream = default)
         {
             _ContentType = string.Empty;
             _Headers = new List<KeyValuePair<string, string>>();
-            if(stream != null)
+            if (stream != null)
             {
                 _OutputStream = stream;
             }
@@ -38,7 +38,7 @@ namespace VSSystem.Net.Models
             }
             _StatusCode = HttpStatusCode.OK;
         }
-        public async Task<byte[]> ToBytesAsync()
+        public async Task<byte[]> ToBytesAsync(CancellationToken cancellationToken = default)
         {
             byte[] result = null;
             if (_OutputStream?.Length > 0)
@@ -48,7 +48,7 @@ namespace VSSystem.Net.Models
                 {
                     try
                     {
-                        await _OutputStream.CopyToAsync(ms);
+                        await _OutputStream.CopyToAsync(ms, DEFAULT_BUFFER_SIZE, cancellationToken);
                     }
                     catch { }
                     ms.Close();
@@ -59,7 +59,7 @@ namespace VSSystem.Net.Models
 
             return result;
         }
-        public async Task<string> ToStringAsync(Encoding encoding = default)
+        public async Task<string> ToStringAsync(Encoding encoding = default, CancellationToken cancellationToken = default)
         {
             string result = string.Empty;
             if (encoding == null)
@@ -69,7 +69,7 @@ namespace VSSystem.Net.Models
 
             try
             {
-                byte[] resultBytes = await ToBytesAsync();
+                byte[] resultBytes = await ToBytesAsync(cancellationToken);
                 result = encoding.GetString(resultBytes);
             }
             catch { }
@@ -81,7 +81,7 @@ namespace VSSystem.Net.Models
 
             try
             {
-                if(_OutputStream != null)
+                if (_OutputStream != null)
                 {
                     _OutputStream.Dispose();
                 }

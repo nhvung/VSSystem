@@ -22,5 +22,7 @@ namespace VSSystem.Net
         public const string Form = "application/x-www-form-urlencoded";
         public const string Png = "image/png";
         public const string Jpg = "image/jpg";
+        public const string Stream = "application/octet-stream";
+        public const string Csv = "text/csv";
     }
 }
